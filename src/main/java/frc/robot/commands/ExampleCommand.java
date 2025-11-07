@@ -22,7 +22,6 @@ public class ExampleCommand extends Command {
   private final double maxSpeed = 1.0;
 
   private double movePosition;
-  
   private Timer timer;
   /**
    * Creates a new ExampleCommand.
