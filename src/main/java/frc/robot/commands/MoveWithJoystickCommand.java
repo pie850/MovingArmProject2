@@ -6,6 +6,11 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.ExampleSubsystem;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
@@ -17,21 +22,52 @@ public class MoveWithJoystickCommand extends Command {
   private final ExampleSubsystem m_subsystem;
   private final double maxSpeed = 1.0;
   
+  private final List<Double> speedsArray = new ArrayList<>();
+
+
     /** Creates a new MoveWithJoystickCommand. */
   public MoveWithJoystickCommand(ExampleSubsystem subsystem) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
+
+  public void findAverage(double speed) {
+
+    speedsArray.add(speed);
+    if (speedsArray.size() >= 20) {
+      speedsArray.remove(0);
+    }
+
+
+    double total = 0;
+    for (double index: speedsArray) {
+      total += index;
+    }
+
+    double target_speed = total/speedsArray.size();
+    
+
+    m_subsystem.setMotor(target_speed);
+  }
+
   public void setSpeed(double speed) {
     if (speed > 0 && m_subsystem.getEncoderDistance() >= 0.062) {
-      m_subsystem.setMotor(speed);
+      findAverage(speed);
     } else if (speed < 0 && m_subsystem.getEncoderDistance() <= 0.569) {
-      m_subsystem.setMotor(speed);
+      findAverage(speed);
     } else {
       m_subsystem.setMotor(0);
+      
+      Collections.fill(speedsArray, 0.0);
     }
-    
+
+    String str = "";
+    for (double index: speedsArray) {
+      str += index;
+    }
+    System.out.println(str);
+
   }
   // Called when the command is initially scheduled.
   @Override
