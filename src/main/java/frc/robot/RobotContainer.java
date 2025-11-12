@@ -43,9 +43,9 @@ public class RobotContainer {
     // cancelling on release.
 
     // positive movement = towards motor, negative movement = away from motor
-    m_driverController.x().onTrue(new ExampleCommand(m_exampleSubsystem, 0.1, 0.062)); // 90 degrees (over motor)
-    m_driverController.y().onTrue(new ExampleCommand(m_exampleSubsystem, -0.1, 0.32)); // vertical
-    m_driverController.b().onTrue(new ExampleCommand(m_exampleSubsystem, -0.1, 0.569)); // 90 degrees (away from motor)
+    m_driverController.x().onTrue(new ExampleCommand(m_exampleSubsystem, 0.062)); // 90 degrees (over motor)
+    m_driverController.y().onTrue(new ExampleCommand(m_exampleSubsystem, 0.32)); // vertical
+    m_driverController.b().onTrue(new ExampleCommand(m_exampleSubsystem, 0.569)); // 90 degrees (away from motor)
   }
 
   /**

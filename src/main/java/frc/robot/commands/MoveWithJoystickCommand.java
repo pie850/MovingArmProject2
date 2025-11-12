@@ -33,9 +33,8 @@ public class MoveWithJoystickCommand extends Command {
   }
 
   public void findAverage(double speed) {
-
-    speedsArray.add(speed);
-    if (speedsArray.size() >= 20) {
+    speedsArray.add(speed*0.5);
+    if (speedsArray.size() >= 6) {
       speedsArray.remove(0);
     }
 
@@ -66,7 +65,7 @@ public class MoveWithJoystickCommand extends Command {
     for (double index: speedsArray) {
       str += index;
     }
-    System.out.println(str);
+    // System.out.println(str);
 
   }
   // Called when the command is initially scheduled.
