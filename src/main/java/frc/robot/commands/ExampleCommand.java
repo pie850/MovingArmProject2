@@ -19,8 +19,8 @@ public class ExampleCommand extends Command {
 //hello
 
   private final PIDController pidController = new PIDController(15, 0.1, 0.4);
-  private final PIDController accelerationpPidController = new PIDController(5, 0, 0.1)
-;
+  private final PIDController accelerationpPidController = new PIDController(5, 0, 0.1);
+  
   private final double maxSpeed = 1.0;
 
   private double movePosition;
