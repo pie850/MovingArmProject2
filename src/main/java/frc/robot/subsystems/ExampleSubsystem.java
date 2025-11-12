@@ -45,7 +45,7 @@ public class ExampleSubsystem extends SubsystemBase {
   }
 
   public void setMotor(double speed) {
-    m_Spark.set(speed);
+    m_Spark.setVoltage(speed * 12);
   }
 
   @Override
