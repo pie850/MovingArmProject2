@@ -6,21 +6,16 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.ExampleSubsystem;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class MoveWithJoystickCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ExampleSubsystem m_subsystem;
-  private final double maxSpeed = 1.0;
   
   private final List<Double> speedsArray = new ArrayList<>();
 
@@ -60,13 +55,6 @@ public class MoveWithJoystickCommand extends Command {
       
       Collections.fill(speedsArray, 0.0);
     }
-
-    String str = "";
-    for (double index: speedsArray) {
-      str += index;
-    }
-    // System.out.println(str);
-
   }
   // Called when the command is initially scheduled.
   @Override
