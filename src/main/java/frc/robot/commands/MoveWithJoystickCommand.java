@@ -47,18 +47,25 @@ public class MoveWithJoystickCommand extends Command {
   }
 
   public void setSpeed(double speed) {
+    //FIRST IF BLOCK
     if (speed > 0) {
-      if (m_subsystem.getEncoderDistance() >= 0.062) findAverage(speed);
+      if (m_subsystem.getEncoderDistance() >= 0.062) {
+        findAverage(speed);
+      }
       else {
         Collections.fill(speedsArray, 0.0);
         findAverage(0.0);
       }
+    //ELSE IF BLOCK
     } else if (speed < 0) {
-      if (m_subsystem.getEncoderDistance() <= 0.569) findAverage(speed);
+      if (m_subsystem.getEncoderDistance() <= 0.569) {
+        findAverage(speed);
+      }
       else {
         Collections.fill(speedsArray, 0.0);
         findAverage(0.0);
       }
+    //ELSE
     } else {
       findAverage(0.0);
     }
