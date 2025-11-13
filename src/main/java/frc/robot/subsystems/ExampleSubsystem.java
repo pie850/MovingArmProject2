@@ -29,6 +29,10 @@ public class ExampleSubsystem extends SubsystemBase {
   public double getEncoderDistance() {
     return m_Encoder.getPosition();
   }
+
+  public double getEncoderVelocity() {
+    return m_Encoder.getVelocity();
+  }
   /**
    * An example method querying a boolean state of the subsystem (for example, a digital sensor).
    *

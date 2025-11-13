@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -20,6 +22,8 @@ public class MoveWithJoystickCommand extends Command {
   //creates and initializes list of joystick positions
   private final List<Double> speedsArray = new ArrayList<>();
 
+  PIDController velocityPID = new PIDController(0.1, 0.05, 0.3);
+
   /** Creates a new MoveWithJoystickCommand. */
   public MoveWithJoystickCommand() {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -28,7 +32,7 @@ public class MoveWithJoystickCommand extends Command {
   }
 
   public void findAverage(double speed) {
-    //change the name to something that is not "speed", it is very difficult to follow
+
     speedsArray.add(speed * 0.5);
 
     //maintain arclength for the derivative of following functions
@@ -47,40 +51,11 @@ public class MoveWithJoystickCommand extends Command {
   }
 
   public void setSpeed(double speed) {
-    double overshoot;
-    if (speed > 0) {
-      if (m_subsystem.getEncoderDistance() >= 0.062) {
-        findAverage(speed);
-      } 
-      else {
-        if (m_subsystem.getEncoderDistance() >= 0.06) {
-          overshoot = Math.abs(0.06 - m_subsystem.getEncoderDistance());
-          System.out.println(overshoot*speed);
-          findAverage(overshoot);
-        } else {
-          Collections.fill(speedsArray, 0.0);
-          findAverage(0.0);
-        }
-      }
-    //ELSE IF BLOCK
-    } else if (speed < 0) {
-      if (m_subsystem.getEncoderDistance() <= 0.55) {
-        findAverage(speed);
-      }
-      else {
-        if (m_subsystem.getEncoderDistance() <= 0.58) {
-          overshoot = Math.abs(0.58 - m_subsystem.getEncoderDistance());
-          System.out.println(overshoot*speed);
-          findAverage(overshoot);
-        } else {
-          Collections.fill(speedsArray, 0.0);
-          findAverage(0.0);
-        }
-      }
-    //ELSE
-    } else {
-      findAverage(0.0);
-    }
+    speed = speed - m_subsystem.getEncoderVelocity();
+    speed = MathUtil.clamp(velocityPID.calculate(speed), -1, 1);
+
+    findAverage(speed);
+
   }
   // Called when the command is initially scheduled.
   @Override
