@@ -16,6 +16,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class MoveWithJoystickCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ExampleSubsystem m_subsystem;
+
+  int count = 0;
+  final int MAX_COUNT = 6;
   
   //creates and initializes list of joystick positions
   private final List<Double> speedsArray = new ArrayList<>();
@@ -27,48 +30,15 @@ public class MoveWithJoystickCommand extends Command {
     m_subsystem = ExampleSubsystem.getInstance();
   }
 
-  public void findAverage(double speed) {
-    //change the name to something that is not "speed", it is very difficult to follow
-    speedsArray.add(speed * 0.5);
-
-    //maintain arclength for the derivative of following functions
-    if (speedsArray.size() > 6) {
-      speedsArray.remove(0);
-    }
-  
-    double total = 0;
-    for (double index : speedsArray) {
-      total += index;
-    }
-    //find average
-    double target_speed = total / speedsArray.size();
-
-    m_subsystem.runMotor(target_speed);
-  }
-
   public void setSpeed(double speed) {
-    //FIRST IF BLOCK
-    if (speed > 0) {
-      if (m_subsystem.getEncoderDistance() >= 0.062) {
-        findAverage(speed);
+      if (speed == 0) {
+          count = 0;
       }
-      else {
-        Collections.fill(speedsArray, 0.0);
-        findAverage(0.0);
+      if (count < MAX_COUNT) {
+          count++;
+          speed = speed * (count / MAX_COUNT);
       }
-    //ELSE IF BLOCK
-    } else if (speed < 0) {
-      if (m_subsystem.getEncoderDistance() <= 0.569) {
-        findAverage(speed);
-      }
-      else {
-        Collections.fill(speedsArray, 0.0);
-        findAverage(0.0);
-      }
-    //ELSE
-    } else {
-      findAverage(0.0);
-    }
+      m_subsystem.runMotor(speed);
   }
   // Called when the command is initially scheduled.
   @Override
