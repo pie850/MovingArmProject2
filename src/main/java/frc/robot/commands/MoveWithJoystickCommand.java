@@ -7,7 +7,6 @@ package frc.robot.commands;
 import frc.robot.subsystems.ExampleSubsystem;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,8 +18,7 @@ public class MoveWithJoystickCommand extends Command {
   
   private final List<Double> speedsArray = new ArrayList<>();
 
-
-    /** Creates a new MoveWithJoystickCommand. */
+  /** Creates a new MoveWithJoystickCommand. */
   public MoveWithJoystickCommand(ExampleSubsystem subsystem) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -28,19 +26,14 @@ public class MoveWithJoystickCommand extends Command {
   }
 
   public void findAverage(double speed) {
-    speedsArray.add(speed*0.5);
-    if (speedsArray.size() >= 6) {
+    speedsArray.add(speed * 0.5);
+    if (speedsArray.size() > 6) {
       speedsArray.remove(0);
     }
 
-
     double total = 0;
-    for (double index: speedsArray) {
-      total += index;
-    }
-
-    double target_speed = total/speedsArray.size();
-    
+    for (double index: speedsArray) total += index;
+    double target_speed = total / speedsArray.size();
 
     m_subsystem.setMotor(target_speed);
   }
@@ -51,14 +44,13 @@ public class MoveWithJoystickCommand extends Command {
     } else if (speed < 0 && m_subsystem.getEncoderDistance() <= 0.569) {
       findAverage(speed);
     } else {
-      m_subsystem.setMotor(0);
-      
-      Collections.fill(speedsArray, 0.0);
+      findAverage(0.0);
     }
   }
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -67,7 +59,8 @@ public class MoveWithJoystickCommand extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
