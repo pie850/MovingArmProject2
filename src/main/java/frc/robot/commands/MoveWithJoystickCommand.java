@@ -17,32 +17,41 @@ public class MoveWithJoystickCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ExampleSubsystem m_subsystem;
   
+  //creates and initializes list of joystick positions
   private final List<Double> speedsArray = new ArrayList<>();
 
   /** Creates a new MoveWithJoystickCommand. */
-  public MoveWithJoystickCommand(ExampleSubsystem subsystem) {
-    m_subsystem = subsystem;
+  public MoveWithJoystickCommand() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    addRequirements(ExampleSubsystem.getInstance());
+    m_subsystem = ExampleSubsystem.getInstance();
   }
 
   public void findAverage(double speed) {
+    //change the name to something that is not "speed", it is very difficult to follow
     speedsArray.add(speed * 0.5);
+
+    //maintain arclength for the derivative of following functions
     if (speedsArray.size() > 6) {
       speedsArray.remove(0);
     }
-
+  
     double total = 0;
-    for (double index: speedsArray) total += index;
+    for (double index : speedsArray) {
+      total += index;
+    }
+    //find average
     double target_speed = total / speedsArray.size();
 
-    m_subsystem.setMotor(target_speed);
+    m_subsystem.runMotor(target_speed);
   }
 
   public void setSpeed(double speed) {
     double overshoot;
     if (speed > 0) {
-      if (m_subsystem.getEncoderDistance() >= 0.09 ) findAverage(speed);
+      if (m_subsystem.getEncoderDistance() >= 0.062) {
+        findAverage(speed);
+      } 
       else {
         if (m_subsystem.getEncoderDistance() >= 0.06) {
           overshoot = Math.abs(0.06 - m_subsystem.getEncoderDistance());
@@ -53,8 +62,11 @@ public class MoveWithJoystickCommand extends Command {
           findAverage(0.0);
         }
       }
+    //ELSE IF BLOCK
     } else if (speed < 0) {
-      if (m_subsystem.getEncoderDistance() <= 0.55) findAverage(speed);
+      if (m_subsystem.getEncoderDistance() <= 0.55) {
+        findAverage(speed);
+      }
       else {
         if (m_subsystem.getEncoderDistance() <= 0.58) {
           overshoot = Math.abs(0.58 - m_subsystem.getEncoderDistance());
@@ -65,6 +77,7 @@ public class MoveWithJoystickCommand extends Command {
           findAverage(0.0);
         }
       }
+    //ELSE
     } else {
       findAverage(0.0);
     }

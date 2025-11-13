@@ -30,11 +30,12 @@ public class ExampleCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ExampleCommand(ExampleSubsystem subsystem, double position) {
-    m_subsystem = subsystem;
-    movePosition = position;
+  public ExampleCommand(double movePosition) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    addRequirements(ExampleSubsystem.getInstance());
+    m_subsystem = ExampleSubsystem.getInstance();
+    this.movePosition = movePosition;
+    
     acceleration = 0.1;
   }
 
@@ -46,33 +47,37 @@ public class ExampleCommand extends Command {
 
   public void toPosition() {
     System.out.println("ran");
+
+    //PID calculation
     double distance = movePosition - m_subsystem.getEncoderDistance();
     double pidCalculation = MathUtil.clamp(pidController.calculate(distance), -maxSpeed, maxSpeed);
-    System.out.println("PID calculation: " + pidCalculation);
+    //System.out.println("PID calculation: " + pidCalculation);
 
+    //calculate acceleration
     double accelerationDifference = targetAcceleration - acceleration;
     double accelerationCaculation = Math.abs(MathUtil.clamp(accelerationPidController.calculate(accelerationDifference), -1, 1));
-    System.out.println("Acceleration calculation: " + accelerationCaculation);  
+    //System.out.println("Acceleration calculation: " + accelerationCaculation);  
     acceleration = MathUtil.clamp(acceleration + accelerationCaculation, 0, 1);
     
+    //move to position
     double motorSpeed = MathUtil.clamp(pidCalculation * acceleration, -1, 1);
-    System.out.println("Motor speed: " + motorSpeed);
-    m_subsystem.setMotor(motorSpeed);
+    //System.out.println("Motor speed: " + motorSpeed);
+    m_subsystem.runMotor(motorSpeed);
   }
 
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("Acceleration: " + acceleration);
+    //System.out.println("Acceleration: " + acceleration);
     toPosition();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("end");
-    m_subsystem.setMotor(0.0);
+    //System.out.println("end");
+    m_subsystem.runMotor(0.0);
     acceleration = 0.1;
   }
 
