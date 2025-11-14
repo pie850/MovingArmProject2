@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 */
+import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -35,6 +36,8 @@ public class MoveWithJoystickCommand extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(ExampleSubsystem.getInstance());
     m_subsystem = ExampleSubsystem.getInstance();
+
+    this.currentSpeed = speed;
 
     velocityPID.setSetpoint(speed);
   }

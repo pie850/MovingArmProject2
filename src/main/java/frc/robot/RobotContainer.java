@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.MoveWithJoystickCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -46,6 +47,9 @@ public class RobotContainer {
     m_driverController.x().onTrue(new ExampleCommand(0.062)); // 90 degrees (over motor)
     m_driverController.y().onTrue(new ExampleCommand(0.32)); // vertical
     m_driverController.b().onTrue(new ExampleCommand(0.569)); // 90 degrees (away from motor)
+
+    m_exampleSubsystem.runMotor(m_driverController.getLeftY());
+
   }
 
   /**
