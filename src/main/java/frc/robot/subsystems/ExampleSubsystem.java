@@ -49,6 +49,7 @@ public class ExampleSubsystem extends SubsystemBase {
   }
 
   public void runMotor(double speed) {
+    //optional but 'set' can be changed to 'setVoltage' once systems are prepared
     m_Spark.set(speed);
   }
 
