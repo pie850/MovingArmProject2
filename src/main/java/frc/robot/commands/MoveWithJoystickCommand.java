@@ -5,59 +5,51 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.ExampleSubsystem;
-
+/*
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+*/
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class MoveWithJoystickCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ExampleSubsystem m_subsystem;
-  
-  //creates and initializes list of joystick positions
-  private final List<Double> speedsArray = new ArrayList<>();
 
+  //PID
   PIDController velocityPID = new PIDController(0.1, 0.05, 0.3);
 
+  double motorKv = 0.0018;
+  Timer accelerationTimer = new Timer();
+
+  double currentSpeed;
+  double acceleration;
+
   /** Creates a new MoveWithJoystickCommand. */
-  public MoveWithJoystickCommand() {
+  public MoveWithJoystickCommand(double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(ExampleSubsystem.getInstance());
     m_subsystem = ExampleSubsystem.getInstance();
-  }
 
-  public void findAverage(double speed) {
-
-    speedsArray.add(speed * 0.5);
-
-    //maintain arclength for the derivative of following functions
-    if (speedsArray.size() > 6) {
-      speedsArray.remove(0);
-    }
-  
-    double total = 0;
-    for (double index : speedsArray) {
-      total += index;
-    }
-    //find average
-    double target_speed = total / speedsArray.size();
-
-    m_subsystem.runMotor(target_speed);
+    velocityPID.setSetpoint(speed);
   }
 
   public void setSpeed(double speed) {
-    speed = speed - m_subsystem.getEncoderVelocity();
-    speed = MathUtil.clamp(velocityPID.calculate(speed), -1, 1);
+    currentSpeed = speed - m_subsystem.getEncoderVelocity();
+    acceleration = MathUtil.clamp(velocityPID.calculate(currentSpeed), -1, 1);
 
-    findAverage(speed);
+    speed = velocityPID.getSetpoint() * motorKv;
+
+    m_subsystem.runMotor(speed);
 
   }
   // Called when the command is initially scheduled.
+
   @Override
   public void initialize() {
   }
