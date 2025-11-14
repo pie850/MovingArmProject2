@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 */
+import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -31,14 +32,14 @@ public class MoveWithJoystickCommand extends Command {
   double acceleration;
 
   /** Creates a new MoveWithJoystickCommand. */
-  public MoveWithJoystickCommand(double speed) {
+  public MoveWithJoystickCommand(DoubleSupplier speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(ExampleSubsystem.getInstance());
     m_subsystem = ExampleSubsystem.getInstance();
 
-    this.currentSpeed = speed;
+    this.currentSpeed = speed.getAsDouble();
 
-    velocityPID.setSetpoint(speed);
+    velocityPID.setSetpoint(speed.getAsDouble());
   }
 
   public void setSpeed(double speed) {

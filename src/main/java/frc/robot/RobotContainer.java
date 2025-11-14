@@ -48,7 +48,7 @@ public class RobotContainer {
     m_driverController.y().onTrue(new ExampleCommand(0.32)); // vertical
     m_driverController.b().onTrue(new ExampleCommand(0.569)); // 90 degrees (away from motor)
 
-    m_exampleSubsystem.runMotor(m_driverController.getLeftY());
+    m_exampleSubsystem.setDefaultCommand(new MoveWithJoystickCommand(() -> m_driverController.getLeftY()));
 
   }
 
