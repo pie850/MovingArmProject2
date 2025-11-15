@@ -7,6 +7,7 @@ package frc.robot.commands;
 import frc.robot.subsystems.ExampleSubsystem;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -85,6 +86,7 @@ public class MoveWithJoystickCommand extends Command {
       findAverage(0.0);
     }
   }
+  }
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
@@ -105,4 +107,6 @@ public class MoveWithJoystickCommand extends Command {
   public boolean isFinished() {
     return false;
   }
+  
 }
+  
