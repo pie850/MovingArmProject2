@@ -7,7 +7,6 @@ package frc.robot.commands;
 import frc.robot.subsystems.ExampleSubsystem;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -78,6 +77,10 @@ public class MoveWithJoystickCommand extends Command {
         }
       }
     //ELSE
+    if (speed > 0 && m_subsystem.getEncoderDistance() >= 0.062) {
+      findAverage(speed);
+    } else if (speed < 0 && m_subsystem.getEncoderDistance() <= 0.569) {
+      findAverage(speed);
     } else {
       findAverage(0.0);
     }
