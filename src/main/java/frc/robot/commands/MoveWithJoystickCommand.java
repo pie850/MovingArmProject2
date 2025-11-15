@@ -49,14 +49,14 @@ public class MoveWithJoystickCommand extends Command {
   public void setSpeed(double speed) {
     double overshoot;
     if (speed > 0) {
-      if (m_subsystem.getEncoderDistance() >= 0.062) {
+      if (m_subsystem.getEncoderDistance() >= 0.09) {
         findAverage(speed);
       } 
       else {
-        if (m_subsystem.getEncoderDistance() >= 0.06) {
-          overshoot = Math.abs(0.06 - m_subsystem.getEncoderDistance());
+        if (m_subsystem.getEncoderDistance() >= 0.062) {
+          overshoot = Math.abs(0.062 - m_subsystem.getEncoderDistance());
           System.out.println(overshoot*speed);
-          findAverage(overshoot);
+          findAverage(overshoot*speed);
         } else {
           Collections.fill(speedsArray, 0.0);
           findAverage(0.0);
@@ -71,7 +71,7 @@ public class MoveWithJoystickCommand extends Command {
         if (m_subsystem.getEncoderDistance() <= 0.58) {
           overshoot = Math.abs(0.58 - m_subsystem.getEncoderDistance());
           System.out.println(overshoot*speed);
-          findAverage(overshoot);
+          findAverage(overshoot*speed);
         } else {
           Collections.fill(speedsArray, 0.0);
           findAverage(0.0);
