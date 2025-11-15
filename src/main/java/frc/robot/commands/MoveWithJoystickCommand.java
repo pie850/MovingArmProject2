@@ -26,9 +26,9 @@ public class MoveWithJoystickCommand extends Command {
     m_subsystem = ExampleSubsystem.getInstance();
   }
 
-  public void findAverage(double inputSpeed) {
+  public void findAverage(double speed) {
     //change the name to something that is not "speed", it is very difficult to follow
-    speedsArray.add(inputSpeed * 0.5);
+    speedsArray.add(speed * 0.5);
 
     //maintain arclength for the derivative of following functions
     if (speedsArray.size() > 6) {
