@@ -36,7 +36,7 @@ public class MoveWithJoystickCommand extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(ExampleSubsystem.getInstance());
     m_subsystem = ExampleSubsystem.getInstance();
-
+    
     this.currentSpeed = speed.getAsDouble();
 
     velocityPID.setSetpoint(speed.getAsDouble());
@@ -46,7 +46,7 @@ public class MoveWithJoystickCommand extends Command {
     currentSpeed = speed - m_subsystem.getEncoderVelocity();
     acceleration = MathUtil.clamp(velocityPID.calculate(currentSpeed), -1, 1);
 
-    speed = velocityPID.getSetpoint() * motorKv;
+    speed = velocityPID.getSetpoint() * motorKv + acceleration;
 
     m_subsystem.runMotor(speed);
 
